@@ -138,15 +138,33 @@ class _MyHomePageState extends State<MyHomePage> {
                             handleSignInEmail(_emailController.text,
                                     _passwordController.text)
                                 .then((user) {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          Home(user.displayName)));
+                                  if(user!=null){
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                Home(user.displayName)));
+                                  }else{
+                                    showDialog(
+                                      context: context,
+                                      builder: (context){
+                                        return AlertDialog(
+                                          title: Text("Invalid email or password!"),
+                                          actions: <Widget>[
+                                            FlatButton(
+                                              child: Text("Ok"),
+                                              onPressed: () => Navigator.pop(context),
+                                            )
+                                          ],
+                                        );
+                                      }
+                                    );
+                                  }
+
                             }).catchError((e) => print(e));
                           }
                         },
-                        child: Text('Sign In'),
+                        child: Text('Sign In', style: TextStyle(color: Colors.white),),
                       )
                     ],
                   ),
@@ -177,7 +195,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Center(
                   child: GestureDetector(
                     onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterPage()));
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => RegisterPage()));
                     },
                     child: Text(
                       "Create an account",
